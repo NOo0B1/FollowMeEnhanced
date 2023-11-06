@@ -269,12 +269,12 @@ end
 -- "!follow" turns on auto-follow
 -- "!status" returns the addon status (Enabled/Disabled).
 function FollowMe_ProcessWhisper(whisper, sender)
-   local top=whisper
    tok=string.sub(whisper,1,1)
    if ( tok ~= "#" ) then
 	   return;
    end
-   local tik, tak = top:match"^(%S+)%s+(.+)"
+
+   local tik, tak = string.match(whisper,"^(%S+)%s+(.+)")
 
    if ( tik == FM_WHISPERCOMMAND_CAST ) then
       if ( FMEnabled == false ) then
