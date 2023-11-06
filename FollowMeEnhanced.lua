@@ -295,7 +295,14 @@ function FollowMe_ProcessWhisper(whisper, sender)
             TargetLastTarget();
          end
       else
-         FollowUnit("target");
+         TargetByName(sender);
+         if ( UnitName("target") == sender ) then
+            FollowUnit("target");
+            TargetLastTarget();
+         else
+            FollowMe_SendWhisper(sender, FM_ERR_GENERIC);
+            TargetLastTarget();
+         end
          --FollowMe_SendWhisper(sender, FM_ERR_NOGROUP);
          TargetLastTarget();
       end
