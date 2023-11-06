@@ -61,8 +61,8 @@ The following commands are supported:
                              disabled, who is being followed).
 
 The received whisper can be one of:
-   "!follow" - Puts auto-follow on the whisper sender
-   "!status" - whispers the status (enabled/disabled) to the sender.
+   "#follow" - Puts auto-follow on the whisper sender
+   "#status" - whispers the status (enabled/disabled) to the sender.
                if following, will report who is being followed.
 
 NOTES:  Auto-follow is exclusive.  That is, you can be put
