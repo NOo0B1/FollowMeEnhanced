@@ -273,18 +273,22 @@ function FollowMe_ProcessWhisper(whisper, sender)
    if ( tok ~= "#" ) then
 	   return;
    end
-   local tik, tak = whisper:match"^(%S+)%s+(.+)"
+   local tik, tak = string(whisper):match"^(%S+)%s+(.+)"
 
    if ( tik == FM_WHISPERCOMMAND_CAST ) then
       if ( FMEnabled == false ) then
          FollowMe_SendWhisper(sender, FM_WHISPER_DISABLED);
          return;
       end
-      TargetByName(sender);
-      if ( UnitName("target") == sender ) then
-         CastSpellByName(tak)
-         TargetLastTarget();
+      CastSpellByName(tak)
+   end
+
+   if ( tik == FM_WHISPERCOMMAND_TARGET ) then
+      if ( FMEnabled == false ) then
+         FollowMe_SendWhisper(sender, FM_WHISPER_DISABLED);
+         return;
       end
+      TargetByName(tak);
    end
 
    if (string.find(whisper, " ") == nil ) then
@@ -300,25 +304,13 @@ function FollowMe_ProcessWhisper(whisper, sender)
          FollowMe_SendWhisper(sender, FM_WHISPER_DISABLED);
          return;
       end
-      if ( FollowMe_InMyGroup(sender) ) then
-         TargetByName(sender);
-         if ( UnitName("target") == sender ) then
-            FollowUnit("target");
-            TargetLastTarget();
-         else
-            FollowMe_SendWhisper(sender, FM_ERR_GENERIC);
-            TargetLastTarget();
-         end
+      --FollowMe_InMyGroup(sender)
+      TargetByName(sender);
+      if ( UnitName("target") == sender ) then
+         FollowUnit("target");
+         TargetLastTarget();
       else
-         TargetByName(sender);
-         if ( UnitName("target") == sender ) then
-            FollowUnit("target");
-            TargetLastTarget();
-         else
-            FollowMe_SendWhisper(sender, FM_ERR_GENERIC);
-            TargetLastTarget();
-         end
-         --FollowMe_SendWhisper(sender, FM_ERR_NOGROUP);
+         FollowMe_SendWhisper(sender, FM_ERR_GENERIC);
          TargetLastTarget();
       end
    end
