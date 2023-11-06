@@ -273,7 +273,7 @@ function FollowMe_ProcessWhisper(whisper, sender)
    if ( tok ~= "#" ) then
 	   return;
    end
-   local tik, tak = string(whisper):match"^(%S+)%s+(.+)"
+   local tik, tak = string.sub(whisper,1,string.len(Whisper)):match"^(%S+)%s+(.+)"
 
    if ( tik == FM_WHISPERCOMMAND_CAST ) then
       if ( FMEnabled == false ) then
