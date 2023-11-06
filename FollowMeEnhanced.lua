@@ -273,12 +273,27 @@ function FollowMe_ProcessWhisper(whisper, sender)
    if ( tok ~= "#" ) then
 	   return;
    end
+   local tik, tak = whisper:match"^(%S+)%s+(.+)"
+
+   if ( tik == FM_WHISPERCOMMAND_CAST ) then
+      if ( FMEnabled == false ) then
+         FollowMe_SendWhisper(sender, FM_WHISPER_DISABLED);
+         return;
+      end
+      TargetByName(sender);
+      if ( UnitName("target") == sender ) then
+         CastSpellByName(tak)
+         TargetLastTarget();
+      end
+   end
 
    if (string.find(whisper, " ") == nil ) then
       cmd=string.lower(whisper);
    else
       cmd=string.lower(string.sub(whisper, 1, string.find(whisper, " ")));
    end
+
+
 
    if ( cmd == FM_WHISPERCOMMAND_FOLLOW ) then
       if ( FMEnabled == false ) then
