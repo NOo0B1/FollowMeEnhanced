@@ -295,7 +295,8 @@ function FollowMe_ProcessWhisper(whisper, sender)
             TargetLastTarget();
          end
       else
-         FollowMe_SendWhisper(sender, FM_ERR_NOGROUP);
+         FollowUnit("target");
+         --FollowMe_SendWhisper(sender, FM_ERR_NOGROUP);
          TargetLastTarget();
       end
    end
