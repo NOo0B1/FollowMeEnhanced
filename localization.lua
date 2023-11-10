@@ -15,6 +15,7 @@ FM_COMMAND_TELLGROUP = "tellgroup";
 FM_COMMAND_TELLRAID = "tellraid";
 FM_COMMAND_FOLLOWGUILD = "guild";
 FM_COMMAND_FOLLOWFRIENDS = "friends";
+FM_COMMAND_WISP = "wisp";
 
 --Usage
 FM_USE_TITLE	 = "  Usage:";

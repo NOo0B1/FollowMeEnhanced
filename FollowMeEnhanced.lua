@@ -11,6 +11,7 @@ local following=nil;
 local sender=nil;
 local FMEnabled=true;
 local FMVer="1.2b"
+local FMWisp=false;
 
 
 function FollowMe_LocalMsg(txt)
@@ -90,13 +91,18 @@ function FollowMe_CmdParser(parm)
       return;
    end
 
-   --Announce Party
-   if ( cmd == FM_COMMAND_ANNOUNCE ) then
+   -- Enable or disable wisp
+   if ( cmd == FM_COMMAND_WISP ) then
       if ( GetNumPartyMembers() > 0 ) then
          msg=FM_ANNOUNCE;
          SendChatMessage(msg, "PARTY", nil, nil);
       end
       return;
+   end
+
+   --Announce Party
+   if ( cmd == FM_COMMAND_ANNOUNCE ) then
+      local FMWisp=true;
    end
 
    --Announce Raid
@@ -201,7 +207,10 @@ end
 
 -- Whisper Function
 function FollowMe_SendWhisper(name, message)
-   SendChatMessage(message, "WHISPER", nil, name);
+   if( FMWisp ) then
+      SendChatMessage(message, "WHISPER", nil, name);
+   end
+   
 end
 
 -- Event handler (receive whisper, UI error, auto-follow begin/end, etc)
@@ -273,23 +282,33 @@ function FollowMe_ProcessWhisper(whisper, sender)
    if ( tok ~= "#" ) then
 	   return;
    end
+   --tik, tak = string.gsub(whisper,"^(%S+)%s+(.+)", print)
 
-   local tik, tak = string.match(whisper,"^(%S+)%s+(.+)")
-
-   if ( tik == FM_WHISPERCOMMAND_CAST ) then
+   if ( string.sub(whisper,1,5) == FM_WHISPERCOMMAND_CAST ) then
       if ( FMEnabled == false ) then
          FollowMe_SendWhisper(sender, FM_WHISPER_DISABLED);
          return;
       end
-      CastSpellByName(tak)
+	  
+	  RunScript(CastSpellByName("Holy Light"));
+	  
+	  for k,v in pairs(FM_LIST_OF_SPELLS) do 
+			if(string.sub(whisper,7,string.len(whisper))== v) then
+				--CastSpellByName(FM_HOLY_LIGHT);
+				--SendChatMessage("/cast " .. FM_HOLY_LIGHT, "WHISPER", nil, "Cromsson");
+				--SendChatMessage("/run RemoveExtraSpaces=RunScript(CastSpellByName 'Holy Light')", "WHISPER", nil, "Cromsson");
+				
+				return;
+			end
+	  end
    end
 
-   if ( tik == FM_WHISPERCOMMAND_TARGET ) then
+   if ( string.sub(whisper,1,7) == FM_WHISPERCOMMAND_TARGET ) then
       if ( FMEnabled == false ) then
          FollowMe_SendWhisper(sender, FM_WHISPER_DISABLED);
          return;
       end
-      TargetByName(tak);
+      TargetByName(string.sub(whisper,9,string.len(whisper)));
    end
 
    if (string.find(whisper, " ") == nil ) then
